@@ -1,4 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
 import { Profile } from "../../profile/entities/profile.entity";
 import { Post } from "src/post/entities/post.entity";
 
@@ -10,10 +18,10 @@ export class Comment {
   @Column()
   content: string;
 
-  @Column()
+  @CreateDateColumn({type: 'timestamp'})
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn({type: 'timestamp'})
   updatedAt: Date;
 
   @Column({type: 'text'})

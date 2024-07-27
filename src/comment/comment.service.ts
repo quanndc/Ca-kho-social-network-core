@@ -32,10 +32,8 @@ export class CommentService {
       throw new NotFoundException('Profile not found');
     }
 
-    // Create the comment
+    // Create the comment in the postEntity and create comment entity
     const newComment = this.commentRepository.create({ ...createCommentDto, uid, postId });
-
-    // Save the comment
     const savedComment = await this.commentRepository.save(newComment);
 
     return savedComment;

@@ -4,7 +4,7 @@ import {
   Entity, JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn, Unique,
   UpdateDateColumn
 } from "typeorm";
 import { Profile } from "../../profile/entities/profile.entity";
@@ -12,6 +12,7 @@ import { Like } from "../../like/entities/like.entity";
 import { Comment } from "../../comment/entities/comment.entity";
 
 @Entity()
+@Unique([ 'uid','id'])
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,8 +29,13 @@ export class Post {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @Column({ type: 'text', unique: true})
+  @Column({ type: 'text'})
   uid: string;
+
+  @Column({ type: 'text', nullable: true })
+  commentId: number[];
+
+
 
   @ManyToOne(() => Profile, (profile) => profile.posts)
   @JoinColumn({ name: 'uid', referencedColumnName: 'uid' })
