@@ -28,10 +28,5 @@ export class Profile {
   @OneToMany(() => Post, (post) => post.uid)
   posts: Post[];
 
-  @OneToMany(() => Comment, comment => comment.commentId)
-  comments: Comment[];
-
-  @OneToMany(() => Like, like => like.likeId)
-  likes: Like[];
 
 }

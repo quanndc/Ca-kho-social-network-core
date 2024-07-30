@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateLikeDto } from './dto/create-like.dto';
 import { UpdateLikeDto } from './dto/update-like.dto';
 import { InjectRepository } from "@nestjs/typeorm";
@@ -7,6 +7,7 @@ import { Repository } from "typeorm";
 import { Post } from "../post/entities/post.entity";
 import { Profile } from "../profile/entities/profile.entity";
 import { PostService } from "../post/post.service";
+import { FORBIDDEN_MESSAGE } from "@nestjs/core/guards";
 
 @Injectable()
 export class LikeService {
@@ -35,8 +36,11 @@ export class LikeService {
       throw new NotFoundException('Profile not found');
     }
 
-    if (!createLikeDto.uid && !createLikeDto.postId) {
-      throw new NotFoundException('Content cannot be empty');
+
+    let like = await this.likeRepository.findOne({ where: { postId, uid } });
+    if (like) {
+      // throw error 403 forbidden if like already exists
+      throw new ForbiddenException('Like already exists');
     }
 
     // Create the like in the postEntity and create like entity
@@ -44,7 +48,6 @@ export class LikeService {
     const savedLike = await this.likeRepository.save(newLike);
 
     //update post entity with like
-    await this.postService.addLikeToPost(postId, savedLike.likeId);
 
     return savedLike;
   }
@@ -56,7 +59,6 @@ export class LikeService {
       throw new NotFoundException('Like not found');
     }
 
-    await this.postService.removeLikeFromPost(like.postId, likeId);
 
     return await this.likeRepository.remove(like);
   }

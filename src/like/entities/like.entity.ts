@@ -16,7 +16,7 @@ export class Like {
   @ManyToOne(()=> Profile, (profile) => profile.uid)
   @JoinColumn({ name: 'uid', referencedColumnName : 'uid'})
 
-  @ManyToOne(() => Post, (post) => post.likes)
+  @ManyToOne(() => Post, post => post, {nullable: false})
   @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
   post: Post;
 

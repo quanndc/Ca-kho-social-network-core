@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Post } from "../post/entities/post.entity";
@@ -36,7 +36,7 @@ export class CommentService {
     }
 
     if (!createCommentDto.content && !createCommentDto.uid && !createCommentDto.postId) {
-      throw new NotFoundException('Content cannot be empty');
+      throw new ForbiddenException('Content cannot be empty');
     }
 
 
@@ -45,7 +45,6 @@ export class CommentService {
     const savedComment = await this.commentRepository.save(newComment);
 
     //update post entity with comment
-    await this.postService.addCommentToPost(postId, savedComment.commentId);
 
     return savedComment;
   }
@@ -82,7 +81,7 @@ export class CommentService {
       throw new NotFoundException('Comment not found');
     }
     if (!updateCommentDto.content && !updateCommentDto.uid && !updateCommentDto.postId) {
-      throw new NotFoundException('Content cannot be empty');
+      throw new ForbiddenException('Content cannot be empty');
     }
     return await this.commentRepository.save({ ...comment, ...updateCommentDto });
   }
@@ -94,7 +93,6 @@ export class CommentService {
       throw new NotFoundException('Comment not found');
     }
     //delete comment from post entity
-    await this.postService.removeCommentFromPost(comment.postId, comment.commentId);
     return await this.commentRepository.remove(comment);
   }
 

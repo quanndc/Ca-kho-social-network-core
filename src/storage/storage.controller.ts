@@ -16,12 +16,15 @@ export class StorageController {
   constructor(private readonly storageService: StorageService) {}
 
   @Post("upload")
-  @UseInterceptors(FilesInterceptor('files'))
-  async uploadFiles(@Body() storageEntity: Storage,
+  @UseInterceptors(FilesInterceptor('files') )
+  async uploadFiles(
     @UploadedFiles() files: Express.Multer.File[],
+    @Body("folderName") folderName: string,
   ): Promise<{ urls: string[] }> {
+    console.log(files);
+    console.log(folderName);
     try {
-      const urls = await this.storageService.uploadFilesToFirebase(files, storageEntity);
+      const urls = await this.storageService.uploadFilesToFirebase(files, folderName);
       console.log(urls);
       return { urls };
     } catch (error) {
