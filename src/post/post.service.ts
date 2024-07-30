@@ -85,4 +85,57 @@ export class PostService {
     await this.postRepository.delete({ id });
 
   }
+
+  //add comment to post
+  async addCommentToPost(postId: number, commentId: number) {
+    const post = await this.findPostById(postId);
+
+    if(!post.commentsId){
+      post.commentsId = [];
+
+    }
+    post.commentsId.push(commentId);
+
+    return await this.postRepository.save(post);
+  }
+
+  //add like to post
+  async addLikeToPost(postId: number, likeId: number) {
+    const post = await this.findPostById(postId);
+    if(!post.likesId){
+      post.likesId = [];
+
+    }
+    post.likesId.push(likeId);
+    return await this.postRepository.save(post);
+  }
+
+  //remove like from post
+  async removeLikeFromPost(postId: number, likeId: number) {
+    const post = await this.findPostById(postId);
+    //check if the post has this likeId yet ?
+    if (!post.likesId.includes(likeId)) {
+      throw new NotFoundException('Like not found');
+    }
+
+    post.likesId = post.likesId.filter((id) => id !== likeId);
+    //if likeId === likeId, remove the likeId from the post
+
+    return await this.postRepository.save(post);
+  }
+
+  //remove comment from post
+  async removeCommentFromPost(postId: number, commentId: number) {
+    const post = await this.findPostById(postId);
+    //check if the post has this commentId yet ?
+    if (!post.commentsId.includes(commentId)) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    post.commentsId = post.commentsId.filter((id) => id !== commentId);
+    //if commentId === commentId, remove the commentId from the post
+
+    return await this.postRepository.save(post);
+  }
 }
+

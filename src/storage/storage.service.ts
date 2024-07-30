@@ -19,6 +19,7 @@ export class StorageService {
       const bucketName =  "gs://social-network-29cc2.appspot.com";
       const urls = [];
 
+
       await Promise.all(
         files.map(async (file) => {
           const fileName = `${storageEntity.folderName}/${uuidv4()}/${file.originalname}`;

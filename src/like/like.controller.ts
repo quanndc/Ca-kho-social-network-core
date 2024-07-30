@@ -8,27 +8,13 @@ export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
   @Post()
-  create(@Body() createLikeDto: CreateLikeDto) {
-    return this.likeService.create(createLikeDto);
+  async create(@Body() createLikeDto: CreateLikeDto) {
+    return this.likeService.create(createLikeDto, createLikeDto.uid, createLikeDto.postId);
   }
 
-  @Get()
-  findAll() {
-    return this.likeService.findAll();
+  @Delete(':likeId')
+  async remove(@Param('likeId') likeId: string) {
+    return this.likeService.deleteLike(+likeId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.likeService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLikeDto: UpdateLikeDto) {
-    return this.likeService.update(+id, updateLikeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.likeService.remove(+id);
-  }
 }

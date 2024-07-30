@@ -32,9 +32,11 @@ export class Post {
   @Column({ type: 'text'})
   uid: string;
 
-  @Column({ type: 'text', nullable: true })
-  commentId: number[];
+  @Column('int', { array: true, nullable: true })
+  commentsId: number[];
 
+  @Column('int', { array: true, nullable: true })
+  likesId: number[];
 
 
   @ManyToOne(() => Profile, (profile) => profile.posts)
@@ -42,9 +44,9 @@ export class Post {
 
 
   @OneToMany(() => Comment, comment => comment.post)
-  comments: Comment[];
+  comments: number[];
 
   @OneToMany(() => Like, like => like.post)
-  likes: Like[];
+  likes: number[];
 
 }

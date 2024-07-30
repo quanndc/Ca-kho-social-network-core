@@ -13,5 +13,6 @@ import { ProfileModule } from "../profile/profile.module";
   ] ,
   controllers: [PostController],
   providers: [PostService],
+  exports: [PostService]
 })
 export class PostModule {}

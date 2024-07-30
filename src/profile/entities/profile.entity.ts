@@ -31,7 +31,7 @@ export class Profile {
   @OneToMany(() => Comment, comment => comment.commentId)
   comments: Comment[];
 
-  @OneToMany(() => Like, like => like.profile)
+  @OneToMany(() => Like, like => like.likeId)
   likes: Like[];
 
 }
