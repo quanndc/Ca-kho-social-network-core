@@ -1,13 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Storage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text")
+  @Column()
   folderName: string;
 
-  @Column("text")
-  photoUrl: string;
+  @ManyToOne(() => Storage, (storage) => storage)
+  photo: Storage;
 }

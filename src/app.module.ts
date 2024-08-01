@@ -10,6 +10,8 @@ import { StorageModule } from './storage/storage.module';
 import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
+import { IdgenService } from './utils/idgen/idgen.service';
+import { IdgenModule } from './utils/idgen/idgen.module';
 
 
 @Module({
@@ -34,11 +36,12 @@ import { LikeModule } from './like/like.module';
     PostModule,
     CommentModule,
     LikeModule,
+    IdgenModule,
 
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, IdgenService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {

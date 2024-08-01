@@ -5,6 +5,8 @@ import { Repository } from "typeorm";
 import { Post } from "./entities/post.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Profile } from "../profile/entities/profile.entity";
+import { StorageService } from "../storage/storage.service";
+import { Storage } from "../storage/entities/storage.entity";
 
 @Injectable()
 export class PostService {
@@ -13,18 +15,26 @@ export class PostService {
     private postRepository: Repository<Post>,
     @InjectRepository(Profile)
     private profileRepository: Repository<Profile>,
+    private storageService: StorageService
   ) {
   }
 
-  async create(createPostDto: CreatePostDto, uid: string) {
+  async create(createPostDto: CreatePostDto, uid: string,url: string[]) {
     const profile = await this.profileRepository.findOne({ where: { uid } });
 
-    // If the uid is empty, throw an error
-    if (!profile) {
-      throw new NotFoundException('Profile not found');
+
+   //call the storage service to upload the image
+    if (!createPostDto.uid) {
+      throw new NotFoundException('uid cannot be empty');
     }
-    
     // Create the post
+
+
+  //how can I add file to call function uploadFilesToFirebase
+  //   const urls = await this.storageService.uploadFilesToFirebase(files, storageEntity);
+  //   console.log(urls);
+    createPostDto.imageUrls = [...url];
+    console.log("url",createPostDto.imageUrls);
     const newPost = this.postRepository.create({ ...createPostDto, uid });
 
     // Save the post
@@ -86,56 +96,5 @@ export class PostService {
 
   }
 
-  //add comment to post
-  async addCommentToPost(postId: number, commentId: number) {
-    const post = await this.findPostById(postId);
-
-    if(!post.commentsId){
-      post.commentsId = [];
-
-    }
-    post.commentsId.push(commentId);
-
-    return await this.postRepository.save(post);
-  }
-
-  //add like to post
-  async addLikeToPost(postId: number, likeId: number) {
-    const post = await this.findPostById(postId);
-    if(!post.likesId){
-      post.likesId = [];
-
-    }
-    post.likesId.push(likeId);
-    return await this.postRepository.save(post);
-  }
-
-  //remove like from post
-  async removeLikeFromPost(postId: number, likeId: number) {
-    const post = await this.findPostById(postId);
-    //check if the post has this likeId yet ?
-    if (!post.likesId.includes(likeId)) {
-      throw new NotFoundException('Like not found');
-    }
-
-    post.likesId = post.likesId.filter((id) => id !== likeId);
-    //if likeId === likeId, remove the likeId from the post
-
-    return await this.postRepository.save(post);
-  }
-
-  //remove comment from post
-  async removeCommentFromPost(postId: number, commentId: number) {
-    const post = await this.findPostById(postId);
-    //check if the post has this commentId yet ?
-    if (!post.commentsId.includes(commentId)) {
-      throw new NotFoundException('Comment not found');
-    }
-
-    post.commentsId = post.commentsId.filter((id) => id !== commentId);
-    //if commentId === commentId, remove the commentId from the post
-
-    return await this.postRepository.save(post);
-  }
 }
 

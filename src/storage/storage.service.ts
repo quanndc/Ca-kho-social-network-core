@@ -14,15 +14,15 @@ export class StorageService {
     private storageRepository: Repository<Storage>,
   ) {
   }
-  async uploadFilesToFirebase(files: Express.Multer.File[],storageEntity:Storage): Promise<string[]> {
+  async uploadFilesToFirebase(files: Express.Multer.File[],folderName: string): Promise<string[]> {
     try{
+      console.log("service", folderName);
       const bucketName =  "gs://social-network-29cc2.appspot.com";
       const urls = [];
 
-
       await Promise.all(
         files.map(async (file) => {
-          const fileName = `${storageEntity.folderName}/${uuidv4()}/${file.originalname}`;
+          const fileName = `${folderName}/${uuidv4()}.data`;
           console.log(fileName);
           const fileUpload = admin.storage().bucket(bucketName).file(fileName);
 

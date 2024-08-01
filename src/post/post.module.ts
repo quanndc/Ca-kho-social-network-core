@@ -5,10 +5,14 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Profile } from "../profile/entities/profile.entity";
 import { Post } from "./entities/post.entity";
 import { ProfileModule } from "../profile/profile.module";
+import { StorageModule } from "../storage/storage.module";
+import { IdgenModule } from "../utils/idgen/idgen.module";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post]),
-    ProfileModule
+    ProfileModule,
+    StorageModule,
+    IdgenModule
 
   ] ,
   controllers: [PostController],
