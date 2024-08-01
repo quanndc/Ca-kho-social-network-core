@@ -23,7 +23,7 @@ export class PostService {
     if (!profile) {
       throw new NotFoundException('Profile not found');
     }
-
+    
     // Create the post
     const newPost = this.postRepository.create({ ...createPostDto, uid });
 

@@ -20,14 +20,14 @@ export class Post {
   @Column({ type: 'text' })
   content: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', {array: true, nullable: true })
   imageUrls: string[];
 
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  @CreateDateColumn()
+  createdAt: string;
 
-  @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updatedAt: string;
 
   @Column({ type: 'text'})
   uid: string;
